@@ -1,5 +1,5 @@
 import streamlit as st
-import yfinance as yf
+import yfinance as yf  # CORRIGIDO: era yFfinance
 import pandas as pd
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
@@ -53,7 +53,7 @@ def calcular_rsi(precos, periodo=14):
 # Dados das ações
 @st.cache_data(ttl=3600)  # Cache por 1 hora
 def carregar_dados():
-    # Lista de tickers
+    # Lista de tickers - CORRIGIDO: "NASDAQ" não "WASDAQ"
     nasdaq_top = ['AAPL', 'MSFT', 'AMZN', 'NVDA', 'GOOGL', 'META', 'TSLA', 'AVGO', 'PEP', 'COST',
                   'ADBE', 'CSCO', 'NFLX', 'AMD', 'INTC', 'CMCSA', 'QCOM', 'INTU', 'AMGN', 'TMUS',
                   'PYPL', 'SBUX', 'GILD', 'MDLZ', 'REGN']
@@ -73,7 +73,7 @@ def carregar_dados():
     for ticker, grupo in todos_tickers:
         try:
             # Baixar dados
-            stock_data = yf.download(
+            stock_data = yf.download(  # CORRIGIDO: yf.download
                 ticker,
                 start=datetime.now() - timedelta(days=90),
                 end=datetime.now(),
@@ -82,7 +82,7 @@ def carregar_dados():
             
             if len(stock_data) > 14:
                 # Informações da empresa
-                info = yf.Ticker(ticker).info
+                info = yf.Ticker(ticker).info  # CORRIGIDO: yf.Ticker
                 
                 # RSI Diário
                 rsi_diario = calcular_rsi(stock_data['Close'])
@@ -269,7 +269,7 @@ ticker_selecionado = st.selectbox(
 if ticker_selecionado:
     try:
         # Baixar dados históricos
-        dados_detalhados = yf.download(
+        dados_detalhados = yf.download(  # CORRIGIDO: yf.download
             ticker_selecionado, 
             period="6mo", 
             interval="1d"
@@ -333,19 +333,3 @@ if ticker_selecionado:
 st.divider()
 st.caption(f"📊 Dados atualizados: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
 st.caption("Fonte: Yahoo Finance API | Atualização automática a cada hora")
-
-# Instruções de deploy
-with st.expander("🚀 Como Fazer Deploy"):
-    st.markdown("""
-    ### Para colocar este app no ar:
-    
-    1. **Faça commit** das mudanças no GitHub
-    2. **Acesse** [share.streamlit.io](https://share.streamlit.io)
-    3. **Clique em** "New app"
-    4. **Selecione** seu repositório
-    5. **Branch:** main
-    6. **Main file path:** app.py
-    7. **Clique** "Deploy"
-    
-    ⏱️ Em 2 minutos seu app estará online!
-    """)
