@@ -1,0 +1,14 @@
+[project]
+name = "rsi-dashboard"
+version = "1.0.0"
+dependencies = [
+    "streamlit>=1.28.0",
+    "yfinance>=0.2.28",
+    "pandas>=2.0.0",
+    "plotly>=5.17.0",
+    "numpy>=1.26.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
